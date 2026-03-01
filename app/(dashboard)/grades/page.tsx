@@ -141,6 +141,7 @@ export default function GradesPage() {
     loadAllData,
     loadMedicos,
   } = useDataLoading();
+  const [medicosFallbackTried, setMedicosFallbackTried] = useState(false);
 
   // Estados para criação de nova linha
   const [novaLinha, setNovaLinha] = useState({
@@ -376,6 +377,35 @@ export default function GradesPage() {
     });
   }, [loadAllData]);
 
+  // Fallback de médicos: tenta uma única vez sem entrar em loop quando a lista vier vazia.
+  useEffect(() => {
+    if (medicos.length > 0) return;
+    if (medicosFallbackTried) return;
+    if (
+      dbLoading ||
+      medicosLoading ||
+      especialidadesLoading ||
+      setoresLoading ||
+      hospitaisLoading
+    ) {
+      return;
+    }
+
+    setMedicosFallbackTried(true);
+    loadMedicos().catch(() => {
+      toast.error("Erro ao carregar médicos");
+    });
+  }, [
+    medicos.length,
+    medicosFallbackTried,
+    dbLoading,
+    medicosLoading,
+    especialidadesLoading,
+    setoresLoading,
+    hospitaisLoading,
+    loadMedicos,
+  ]);
+
   // Converter grades do banco para formato local quando carregarem
   useEffect(() => {
     if (dbGrades.length === 0) {
@@ -585,13 +615,6 @@ export default function GradesPage() {
       duration: 3000,
     });
   };
-
-  // Carregar médicos usando hook (ETAPA 1.9)
-  useEffect(() => {
-    if (medicos.length === 0 && !medicosLoading) {
-      loadMedicos();
-    }
-  }, [medicos.length, medicosLoading, loadMedicos]);
 
   // Removido sistema de auto-save automático
 
