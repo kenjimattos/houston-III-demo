@@ -1,4 +1,9 @@
 create extension if not exists "http" with schema "extensions";
+create extension if not exists "uuid-ossp" with schema "extensions";
+create extension if not exists "pgcrypto" with schema "extensions";
+
+-- Garantir resolução de uuid_generate_v4() e gen_random_uuid() no remoto
+set search_path = public, extensions;
 
 -- Create supabase_functions schema if it doesn't exist
 create schema if not exists supabase_functions;
@@ -7057,5 +7062,4 @@ CREATE TRIGGER medicos_1_cleanup_precadastro AFTER INSERT ON public.medicos FOR 
 -- CREATE TRIGGER notifications_1_send_notification AFTER INSERT ON public.notifications FOR EACH ROW EXECUTE FUNCTION supabase_functions.http_request('https://hxgbaruenomkfeeafmff.supabase.co/functions/v1/notification-send', 'POST', '{}', '{}', '5000');
 
 CREATE TRIGGER vagas_1_reprovar_candidaturas_ao_cancelar AFTER UPDATE OF vagas_status ON public.vagas FOR EACH ROW EXECUTE FUNCTION atualizar_candidaturas_vaga_cancelada();
-
 
