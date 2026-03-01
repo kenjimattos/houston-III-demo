@@ -27,6 +27,10 @@ BEGIN;
 -- demo_recorrencia_id = cccccccc-cccc-4ccc-8ccc-cccccccccccc
 -- demo_vaga_grade_1   = dddddddd-dddd-4ddd-8ddd-dddddddddddd
 -- demo_vaga_grade_2   = eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee
+-- demo_medico_pre_1   = f1111111-1111-4111-8111-111111111111
+-- demo_medico_pre_2   = f2222222-2222-4222-8222-222222222222
+-- demo_medico_pre_3   = f3333333-3333-4333-8333-333333333333
+-- demo_medico_pre_4   = f4444444-4444-4444-8444-444444444444
 
 -- -----------------------------------------------------------------------------
 -- Catálogos mínimos
@@ -602,6 +606,83 @@ SET
   setor_ids = EXCLUDED.setor_ids;
 
 -- -----------------------------------------------------------------------------
+-- Médicos fictícios (pré-cadastro) para visualização em selects/listas
+-- -----------------------------------------------------------------------------
+INSERT INTO public.medicos_precadastro (
+  id,
+  primeiro_nome,
+  sobrenome,
+  crm,
+  cpf,
+  email,
+  telefone,
+  especialidade_id,
+  created_by,
+  created_at,
+  estado
+)
+VALUES (
+  'f1111111-1111-4111-8111-111111111111',
+  'Ana',
+  'Carvalho',
+  'CRM-DEMO-1001',
+  '11111111101',
+  'ana.carvalho.demo@houston.local',
+  '11981110001',
+  '44444444-4444-4444-8444-444444444444',
+  '12121212-1212-4121-8121-121212121212',
+  NOW(),
+  'SP'
+), (
+  'f2222222-2222-4222-8222-222222222222',
+  'Bruno',
+  'Mendes',
+  'CRM-DEMO-1002',
+  '11111111102',
+  'bruno.mendes.demo@houston.local',
+  '11981110002',
+  '44444444-4444-4444-8444-444444444444',
+  '12121212-1212-4121-8121-121212121212',
+  NOW(),
+  'SP'
+), (
+  'f3333333-3333-4333-8333-333333333333',
+  'Camila',
+  'Rocha',
+  'CRM-DEMO-1003',
+  '11111111103',
+  'camila.rocha.demo@houston.local',
+  '11981110003',
+  '44444444-4444-4444-8444-444444444444',
+  '12121212-1212-4121-8121-121212121212',
+  NOW(),
+  'SP'
+), (
+  'f4444444-4444-4444-8444-444444444444',
+  'Diego',
+  'Almeida',
+  'CRM-DEMO-1004',
+  '11111111104',
+  'diego.almeida.demo@houston.local',
+  '11981110004',
+  '44444444-4444-4444-8444-444444444444',
+  '12121212-1212-4121-8121-121212121212',
+  NOW(),
+  'SP'
+)
+ON CONFLICT (id) DO UPDATE
+SET
+  primeiro_nome = EXCLUDED.primeiro_nome,
+  sobrenome = EXCLUDED.sobrenome,
+  crm = EXCLUDED.crm,
+  cpf = EXCLUDED.cpf,
+  email = EXCLUDED.email,
+  telefone = EXCLUDED.telefone,
+  especialidade_id = EXCLUDED.especialidade_id,
+  created_by = EXCLUDED.created_by,
+  estado = EXCLUDED.estado;
+
+-- -----------------------------------------------------------------------------
 -- Grade demo + plantões gerados por grade
 -- -----------------------------------------------------------------------------
 INSERT INTO public.grades (
@@ -630,12 +711,69 @@ VALUES (
   '#0EA5E9',
   7,
   '{
+    "lineNames": {"0":"Semana Principal"},
+    "selectedDays": {"0":[true,false,true,false,true,false,false]},
+    "slotsByDay": {
+      "0": {
+        "0": [
+          {
+            "id":"slot-demo-seg-1",
+            "startHour":7,
+            "endHour":19,
+            "vagasCount":1,
+            "lineIndex":0,
+            "rowIndex":0,
+            "assignedVagas":[
+              {"medicoId":"f1111111-1111-4111-8111-111111111111","medicoNome":"Ana Carvalho"}
+            ]
+          }
+        ],
+        "1": [],
+        "2": [
+          {
+            "id":"slot-demo-qua-1",
+            "startHour":7,
+            "endHour":19,
+            "vagasCount":1,
+            "lineIndex":0,
+            "rowIndex":0,
+            "assignedVagas":[
+              {"medicoId":"f2222222-2222-4222-8222-222222222222","medicoNome":"Bruno Mendes"}
+            ]
+          }
+        ],
+        "3": [],
+        "4": [
+          {
+            "id":"slot-demo-sex-1",
+            "startHour":7,
+            "endHour":19,
+            "vagasCount":1,
+            "lineIndex":0,
+            "rowIndex":0,
+            "assignedVagas":[
+              {"medicoId":"f3333333-3333-4333-8333-333333333333","medicoNome":"Camila Rocha"}
+            ]
+          }
+        ],
+        "5": [],
+        "6": []
+      }
+    },
+    "weekStartHours": {"0":7},
+    "dayRowCounts": {"0":{"0":1,"2":1,"4":1}},
+    "tipoCalculo":"valor_hora",
+    "valorPorHora":160,
+    "diasPagamento":"30dias",
+    "formaRecebimento":"88888888-8888-4888-8888-888888888888",
+    "tipoVaga":"77777777-7777-4777-8777-777777777777",
+    "observacoesPadrao":"Plantões gerados automaticamente a partir da grade demo."
+  ,
     "slots": [
-      {"id":"slot-demo-1","startHour":7,"endHour":19,"vagasCount":1,"lineIndex":0}
-    ],
-    "lineNames":{"0":"Linha Principal"},
-    "selectedDays":{"0":[true,false,true,false,true,false,false]},
-    "weekStartHours":{"0":7}
+      {"id":"slot-demo-seg-1","startHour":7,"endHour":19,"vagasCount":1,"lineIndex":0},
+      {"id":"slot-demo-qua-1","startHour":7,"endHour":19,"vagasCount":1,"lineIndex":0},
+      {"id":"slot-demo-sex-1","startHour":7,"endHour":19,"vagasCount":1,"lineIndex":0}
+    ]
   }'::jsonb,
   0,
   NOW(),
@@ -709,7 +847,9 @@ INSERT INTO public.vagas (
   status,
   total_candidaturas,
   grupo_id,
-  forma_recebimento_id
+  forma_recebimento_id,
+  recorrencia_id,
+  grade_id
 )
 VALUES (
   '99999999-9999-4999-8999-999999999999',
@@ -731,7 +871,9 @@ VALUES (
   'aberta',
   0,
   '22222222-2222-4222-8222-222222222222',
-  '88888888-8888-4888-8888-888888888888'
+  '88888888-8888-4888-8888-888888888888',
+  'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+  'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'
 )
 ON CONFLICT (id) DO UPDATE
 SET
@@ -752,7 +894,9 @@ SET
   status = EXCLUDED.status,
   total_candidaturas = EXCLUDED.total_candidaturas,
   grupo_id = EXCLUDED.grupo_id,
-  forma_recebimento_id = EXCLUDED.forma_recebimento_id;
+  forma_recebimento_id = EXCLUDED.forma_recebimento_id,
+  recorrencia_id = EXCLUDED.recorrencia_id,
+  grade_id = EXCLUDED.grade_id;
 
 INSERT INTO public.vagas (
   id,
