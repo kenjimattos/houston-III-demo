@@ -1,0 +1,304 @@
+/* Estilos personalizados para o calendário */
+.custom-calendar .rbc-month-view {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: visible;
+}
+
+.custom-calendar .rbc-month-row {
+  overflow: visible;
+}
+
+.custom-calendar .rbc-date-cell {
+  padding: 4px;
+  text-align: center;
+}
+
+.custom-calendar .rbc-row-content {
+  z-index: 1;
+}
+
+.custom-calendar .rbc-event {
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.custom-calendar .rbc-day-bg {
+  transition: background-color 0.2s;
+}
+
+.custom-calendar .rbc-day-bg:hover {
+  background-color: rgba(243, 244, 246, 0.5);
+}
+
+.custom-calendar .rbc-off-range-bg {
+  background-color: #f8fafc;
+}
+
+.custom-calendar .rbc-off-range {
+  color: #94a3b8;
+}
+
+.custom-calendar .rbc-today {
+  background-color: rgba(236, 253, 245, 0.4);
+}
+
+/* Ajuste para garantir que as badges fiquem dentro do quadro do dia */
+.custom-calendar .rbc-row-segment {
+  padding: 0 1px;
+}
+
+.custom-calendar .rbc-event-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+/* Ajustes para altura dinâmica das células do mês */
+.custom-calendar .rbc-month-row {
+  height: auto !important;
+  max-height: none !important;
+  min-height: auto !important;
+  margin: 0 !important;
+}
+
+/* Primeira row após o header (com datas) */
+.custom-calendar .rbc-month-header + .rbc-month-row {
+  margin-top: -20px !important;
+}
+
+/* Garantir que o conteúdo das células não seja cortado */
+.custom-calendar .rbc-date-cell {
+  min-height: auto !important;
+  height: auto !important;
+}
+
+.custom-calendar .rbc-row {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 60px;
+}
+
+.custom-calendar .rbc-row-content {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 60px;
+  margin-top: 0 !important;
+}
+
+/* Compactar espaçamentos do calendário */
+.custom-calendar .rbc-month-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.custom-calendar .rbc-month-header {
+  margin-bottom: 0;
+  height: auto !important;
+}
+
+/* Header dos dias da semana - altura fixa */
+.custom-calendar .rbc-month-header {
+  height: 40px !important;
+}
+
+.custom-calendar .rbc-header {
+  padding: 8px 4px !important;
+  height: 40px !important;
+  line-height: 24px !important;
+}
+
+/* Remover espaço entre header e primeira linha */
+.custom-calendar .rbc-month-view > div:first-child {
+  margin-bottom: 0 !important;
+}
+
+.custom-calendar .rbc-row-bg {
+  padding: 0;
+  top: 0 !important;
+}
+
+.custom-calendar .rbc-row {
+  margin: 0;
+  padding: 0;
+  overflow: visible !important;
+}
+
+/* Ajuste para a visualização dos médicos */
+.custom-calendar .rbc-date-cell {
+  overflow: visible !important;
+  position: relative;
+  padding: 2px;
+  vertical-align: top;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.custom-calendar .rbc-day-bg {
+  position: relative !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 60px;
+  overflow: visible !important;
+}
+
+/* Remover qualquer limitação de altura nas células */
+.custom-calendar .rbc-date-cell,
+.custom-calendar .rbc-date-cell > div,
+.custom-calendar .rbc-day-bg,
+.custom-calendar .rbc-day-bg > div {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Remover display flex que estava causando problemas */
+.custom-calendar .rbc-row-bg {
+  height: auto !important;
+}
+
+/* Reduzir padding do header */
+.custom-calendar .rbc-header {
+  padding: 4px 8px;
+  font-weight: 500;
+}
+
+/* Esconder a área de eventos vazios */
+.custom-calendar .rbc-events-container {
+  display: none;
+}
+
+.custom-calendar .rbc-show-more {
+  display: none;
+}
+
+
+/* Ajustar espaçamento do número do dia - removendo position absolute */
+.custom-calendar .rbc-date-cell {
+  position: relative;
+}
+
+/* Estilo para as seções de horário */
+.custom-calendar .rbc-day-bg .text-gray-600 {
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.custom-calendar .rbc-day-bg .ml-2 {
+  font-size: 11px;
+}
+
+/* Permitir que o calendário se expanda livremente */
+.custom-calendar {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.custom-calendar .rbc-calendar {
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* Células com altura baseada no conteúdo - alta especificidade */
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view .rbc-day-bg {
+  height: auto !important;
+  min-height: 60px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 2px !important;
+}
+
+/* Conteúdo determina altura - máxima especificidade */
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view .rbc-day-bg > div {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Nosso componente - forçar altura baseada no conteúdo */
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view .rbc-day-bg .flex.flex-col {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Container principal do mês - sem limitações de altura */
+.custom-calendar .rbc-month-view {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Células do mês sem limitações de altura */
+.custom-calendar .rbc-month-view .rbc-date-cell {
+  height: auto !important;
+  min-height: 60px !important;
+  max-height: none !important;
+  padding: 2px;
+  vertical-align: top;
+  overflow: visible !important;
+}
+
+/* Override extremamente específico para forçar altura independente por linha */
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view tbody tr {
+  height: auto !important;
+  min-height: 60px !important;
+  max-height: none !important;
+}
+
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view tbody tr td {
+  height: auto !important;
+  min-height: 60px !important;
+  max-height: none !important;
+  vertical-align: top !important;
+  border: 1px solid #e2e8f0 !important;
+  position: relative !important;
+}
+
+/* Forçar elementos da biblioteca com máxima especificidade */
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view .rbc-row {
+  height: auto !important;
+  min-height: 60px !important;
+  max-height: none !important;
+}
+
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view .rbc-row-content {
+  height: auto !important;
+  min-height: 60px !important;
+  max-height: none !important;
+}
+
+.custom-calendar.custom-calendar.custom-calendar .rbc-month-view .rbc-row-bg {
+  height: auto !important;
+  min-height: 60px !important;
+  max-height: none !important;
+}
+
+/* Tentar quebrar o comportamento de altura uniforme da tabela */
+.custom-calendar .rbc-month-view table {
+  table-layout: auto !important;
+}
+
+.custom-calendar .rbc-month-view tbody {
+  display: table-row-group !important;
+}
+
+/* Melhor responsividade para telas menores */
+@media (max-width: 768px) {
+  .custom-calendar .rbc-month-row,
+  .custom-calendar .rbc-month-view tbody tr {
+    min-height: 120px !important;
+  }
+  
+  .custom-calendar .rbc-toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

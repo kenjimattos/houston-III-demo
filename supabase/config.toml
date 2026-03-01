@@ -1,0 +1,232 @@
+# For detailed configuration reference documentation, visit:
+# https://supabase.com/docs/guides/local-development/cli/config
+
+# Local project identifier
+project_id = "supabase"
+
+# =========================================================================
+# API CONFIGURATION
+# =========================================================================
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public", "houston"]
+extra_search_path = ["public", "extensions"]
+max_rows = 2000
+
+[api.tls]
+enabled = false
+
+# =========================================================================
+# DATABASE CONFIGURATION
+# =========================================================================
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.pooler]
+enabled = false
+port = 54329
+pool_mode = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+
+[db.migrations]
+schema_paths = []
+
+[db.seed]
+# Seed só roda em branches efêmeras e no `supabase db reset` local.
+# Deploys para production/staging ignoram seed por padrão.
+enabled = true
+sql_paths = ["./seed.sql"]
+
+# =========================================================================
+# REALTIME CONFIGURATION
+# =========================================================================
+
+[realtime]
+enabled = true
+
+# =========================================================================
+# STUDIO CONFIGURATION
+# =========================================================================
+
+[studio]
+enabled = true
+port = 54323
+api_url = "http://127.0.0.1"
+openai_api_key = "env(OPENAI_API_KEY)"
+
+# =========================================================================
+# EMAIL TESTING (LOCAL ONLY)
+# =========================================================================
+
+[inbucket]
+enabled = true
+port = 54324
+
+# =========================================================================
+# STORAGE CONFIGURATION
+# =========================================================================
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[storage.buckets.avatarhospitais]
+public = true
+
+[storage.buckets.carteira-digital]
+public = true
+
+# =========================================================================
+# AUTH CONFIGURATION
+# =========================================================================
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = [
+  "https://127.0.0.1:3000/auth/reset-password",
+  "https://127.0.0.1:3000/auth/create-password",
+  "https://localhost:3000/auth/reset-password",
+  "https://localhost:3000/auth/create-password",
+]
+jwt_expiry = 120
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+enable_anonymous_sign_ins = false
+enable_manual_linking = false
+minimum_password_length = 6
+password_requirements = ""
+
+[auth.rate_limit]
+email_sent = 2
+sms_sent = 30
+anonymous_users = 30
+token_refresh = 150
+sign_in_sign_ups = 30
+token_verifications = 30
+web3 = 30
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+secure_password_change = false
+max_frequency = "1m0s"
+otp_length = 6
+otp_expiry = 3600
+
+#  Email Templates (para desenvolvimento local e branches efemeras)
+# Para producao/staging, os templates devem ser configurados no Dashboard
+[auth.email.template.confirmation]
+subject = "Confirme seu cadastro - Revoluna"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.invite]
+subject = "Você foi convidado - Revoluna"
+content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.magic_link]
+subject = "Seu link de acesso - Revoluna"
+content_path = "./supabase/templates/magic_link.html"
+
+[auth.email.template.recovery]
+subject = "Redefinir sua senha - Revoluna"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.email_change]
+subject = "Confirmar alteracao de email - Revoluna"
+content_path = "./supabase/templates/email_change.html"
+
+[auth.email.template.reauthentication]
+subject = "Codigo de verificacao - Revoluna"
+content_path = "./supabase/templates/reauthentication.html"
+
+[auth.sms]
+enable_signup = true
+enable_confirmations = false
+template = "Your code is {{ .Code }}"
+max_frequency = "5s"
+
+[auth.sms.twilio]
+enabled = true
+account_sid = "env(TWILIO_ACCOUNT_SID)"
+message_service_sid = "env(TWILIO_MESSAGE_SERVICE_SID)"
+auth_token = "env(TWILIO_AUTH_TOKEN)"
+
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/houston/custom_access_token_hook"
+
+[auth.mfa]
+max_enrolled_factors = 10
+
+[auth.mfa.totp]
+enroll_enabled = false
+verify_enabled = false
+
+[auth.mfa.phone]
+enroll_enabled = false
+verify_enabled = false
+otp_length = 6
+template = "Your code is {{ .Code }}"
+max_frequency = "5s"
+
+[auth.external.apple]
+enabled = false
+client_id = ""
+secret = "env(SUPABASE_AUTH_EXTERNAL_APPLE_SECRET)"
+redirect_uri = ""
+url = ""
+skip_nonce_check = false
+
+[auth.web3.solana]
+enabled = false
+
+[auth.third_party.firebase]
+enabled = false
+
+[auth.third_party.auth0]
+enabled = false
+
+[auth.third_party.aws_cognito]
+enabled = false
+
+[auth.third_party.clerk]
+enabled = false
+
+# =========================================================================
+# EDGE FUNCTIONS
+# =========================================================================
+
+[edge_runtime]
+enabled = true
+policy = "oneshot"
+inspector_port = 8083
+deno_version = 1
+
+# =========================================================================
+# ANALYTICS
+# =========================================================================
+
+[analytics]
+enabled = true
+port = 54327
+backend = "postgres"
+
+# =========================================================================
+# EXPERIMENTAL
+# =========================================================================
+
+[experimental]
+orioledb_version = ""
+s3_host = "env(S3_HOST)"
+s3_region = "env(S3_REGION)"
+s3_access_key = "env(S3_ACCESS_KEY)"
+s3_secret_key = "env(S3_SECRET_KEY)"

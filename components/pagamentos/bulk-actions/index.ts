@@ -1,0 +1,1 @@
+export { PagamentosBulkActionsBar } from "./PagamentosBulkActionsBar";
