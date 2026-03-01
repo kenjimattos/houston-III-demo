@@ -7,6 +7,7 @@ import { DoctorSelector } from "@/components/medicos/doctor-selector";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -65,7 +66,7 @@ import {
   verificarConflitoHorario,
 } from "@/services/vagasService";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, ChevronDown } from "lucide-react";
+import { AlertTriangle, CalendarIcon, ChevronDown } from "lucide-react";
 import { useState, useCallback, useEffect } from "react";
 import { format } from "date-fns";
 
@@ -2003,6 +2004,29 @@ export function CreateJobModal({
     setEditedFields(new Set()); // Limpar campos editados no reset
   };
 
+  const missingRequiredFields = !bulkEditMode
+    ? [
+        { label: "Hospital", valid: !!selectedHospital },
+        { label: "Data do plantão", valid: dates.length > 0 },
+        { label: "Período", valid: !!selectedPeriodo },
+        { label: "Hora de início", valid: !!startTime },
+        { label: "Hora de fim", valid: !!endTime },
+        { label: "Setor", valid: !!selectedSector },
+        { label: "Especialidade", valid: !!selectedSpecialty },
+        { label: "Tipo de vaga", valid: !!jobType },
+        { label: "Valor", valid: !!value },
+        { label: "Forma de recebimento", valid: !!paymentMethod },
+        { label: "Grupo", valid: !!selectedGrupo },
+        { label: "Escalista", valid: !!selectedEscalista },
+        {
+          label: "Data personalizada de pagamento",
+          valid: prazoPagamento !== "data_fechamento" || !!dataFechamento,
+        },
+      ]
+        .filter((field) => !field.valid)
+        .map((field) => field.label)
+    : [];
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -2896,6 +2920,15 @@ export function CreateJobModal({
               )}
             </div>
             <div style={{ height: 12 }} />
+            {!bulkEditMode && missingRequiredFields.length > 0 && (
+              <Alert className="border-amber-300 bg-amber-50">
+                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                <AlertDescription className="text-amber-900">
+                  Formulário incompleto. Preencha:{" "}
+                  {missingRequiredFields.join(", ")}.
+                </AlertDescription>
+              </Alert>
+            )}
             <DialogFooter className="gap-2">
               <Button
                 type="submit"
