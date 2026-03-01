@@ -19,9 +19,9 @@ SET LOCAL search_path = public, extensions;
 -- demo_hospital_id_2  = 3a3a3a3a-3a3a-43a3-83a3-3a3a3a3a3a3a
 -- demo_hospital_id_3  = 3b3b3b3b-3b3b-43b3-83b3-3b3b3b3b3b3b
 -- demo_especialidade  = 44444444-4444-4444-8444-444444444444
--- demo_setor_id       = 55555555-5555-4555-8555-555555555555
--- demo_periodo_id     = 66666666-6666-4666-8666-666666666666
--- demo_tipo_vaga_id   = 77777777-7777-4777-8777-777777777777
+-- demo_setor_id       = 1382a750-6424-430c-9672-bbd92d3c9eb8
+-- demo_periodo_id     = 7b3b2041-055a-4e14-9ea9-3d4696552165
+-- demo_tipo_vaga_id   = 87f2ad06-0fe8-4e8b-9df2-e7314c38228e
 -- demo_forma_rec_id   = 88888888-8888-4888-8888-888888888888
 -- demo_vaga_id        = 99999999-9999-4999-8999-999999999999
 -- demo_identity_id    = aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa
@@ -81,40 +81,77 @@ SET
   index = EXCLUDED.index;
 
 INSERT INTO public.setores (id, nome, created_at, updated_at)
-VALUES (
-  '55555555-5555-4555-8555-555555555555',
-  'Pronto Atendimento (Demo)',
-  NOW(),
-  NOW()
-)
+VALUES
+  ('ae1055f0-4527-460e-8ac5-d81a936ec5f1', 'Pronto-socorro', NOW(), NOW()),
+  ('a0dd42c1-689a-4d19-ab06-6ddc329bf39b', 'SADT', NOW(), NOW()),
+  ('6beadfb3-861d-46fe-8515-16c0c2708204', 'Hospital', NOW(), NOW()),
+  ('93f00415-ab9c-4911-a6cb-197b430d71a1', 'C. Cirúrgico', NOW(), NOW()),
+  ('d773c3a0-5816-4ee2-8e07-48f8c321789c', 'C. Obstétrico', NOW(), NOW()),
+  ('45da1a0b-9a69-4acf-80c1-136e33a6eca1', 'RPA', NOW(), NOW()),
+  ('1382a750-6424-430c-9672-bbd92d3c9eb8', 'Pronto atendimento', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE
 SET
   nome = EXCLUDED.nome,
   updated_at = NOW();
 
 INSERT INTO public.periodos (id, created_at, nome, updated_at)
-VALUES (
-  '66666666-6666-4666-8666-666666666666',
-  NOW(),
-  'Diurno',
-  NOW()
-)
+VALUES
+  ('d211f079-a3f9-4cf7-9c47-084b699a26e5', NOW(), 'Cinderela', NOW()),
+  ('b4615fd3-37e9-486e-8186-9266e3013c03', NOW(), 'Meio período (manhã)', NOW()),
+  ('719e1973-f238-4d11-9208-5d7d6de2e919', NOW(), 'Noturno', NOW()),
+  ('7b3b2041-055a-4e14-9ea9-3d4696552165', NOW(), 'Diurno', NOW()),
+  ('91450e1e-2931-4c0d-932d-7c4787dd1512', NOW(), 'Meio período (tarde)', NOW()),
+  ('53d7c9d2-c042-4a37-aee9-dfd13d2882bf', NOW(), 'Vespertino', NOW())
 ON CONFLICT (id) DO UPDATE
 SET
   nome = EXCLUDED.nome,
   updated_at = NOW();
 
 INSERT INTO public.tipos_vaga (id, created_at, nome, updated_at)
-VALUES (
-  '77777777-7777-4777-8777-777777777777',
-  NOW(),
-  'Plantão',
-  NOW()
-)
+VALUES
+  ('418cf451-ec43-415c-87bc-5685dc290842', NOW(), 'Cobertura', NOW()),
+  ('9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e', NOW(), 'Ambulatorial', NOW()),
+  ('87f2ad06-0fe8-4e8b-9df2-e7314c38228e', NOW(), 'Fixo', NOW())
 ON CONFLICT (id) DO UPDATE
 SET
   nome = EXCLUDED.nome,
   updated_at = NOW();
+
+INSERT INTO public.beneficios (id, nome, created_at)
+VALUES
+  ('e47d776b-e40f-401f-a161-a87d3eef7674', 'Estacionamento', NOW()),
+  ('2b7c4861-5fdc-4e71-8d19-e6a0941ab9e2', 'Alimentação', NOW()),
+  ('eeec6469-36ca-41ef-ba70-0bd33d9573d4', 'Conforto médico', NOW()),
+  ('3a226090-183a-4371-a560-c9c620ca2866', 'Wi-Fi', NOW()),
+  ('66185cc4-56dd-4365-8be9-ff42845e0d0a', 'Biblioteca', NOW()),
+  ('4b852596-aa60-44d2-b422-a69032c94f7e', 'Salas de reunião', NOW()),
+  ('9ee5f725-e286-4cbc-a900-bc0f1320282e', 'Prontuário eletrônico', NOW()),
+  ('211d599d-5b3e-4123-9242-51f6e957fdff', 'Suporte administrativo', NOW()),
+  ('b55fca22-78d4-4b30-9cb1-f1b8fdc0a96a', 'Transporte', NOW())
+ON CONFLICT (id) DO UPDATE
+SET
+  nome = EXCLUDED.nome;
+
+INSERT INTO public.requisitos (id, nome)
+VALUES
+  ('46267ac0-7e61-4b2b-9cd4-fe830fa20463', 'Atestado de saúde ocupacional'),
+  ('39518d7f-b219-4b3d-855e-500aef497c56', 'Certidão de antecedentes criminais'),
+  ('4552b3ff-5fc1-4b0b-8c5a-c597d44f81ac', 'Certificação em Suporte Avançado de Vida (ACLS)'),
+  ('dbb51dbd-2104-4ed4-9626-aacad80921c4', 'Certificação em Suporte Básico de Vida (BLS)'),
+  ('84146d8d-4283-4e9d-bbda-3451ec5e4ec7', 'Comprovante de vacinação atualizado'),
+  ('091a379f-6da7-4b7d-b942-28172cb657a0', 'Conhecimento em protocolos de urgência e emergência'),
+  ('9801f87b-8407-4bed-a4d8-4308273c6a58', 'CPF'),
+  ('62a37948-7219-400f-bbdc-2fffb5623ced', 'CRM'),
+  ('a8440cc5-2074-4a68-98e3-55afc7d68eee', 'Curriculum vitae'),
+  ('1266a931-1ede-4097-ba6b-8003cf9e8fd6', 'Curso de Atendimento Pré-Hospitalar '),
+  ('213314a6-beb5-44ed-990b-8171a08b2b20', 'Diploma'),
+  ('5f9e5c3f-4554-496d-b6c0-ab335ea076af', 'Mais de 2 anos de experiência'),
+  ('06d4fba5-5ae7-44b7-add3-24d372017b95', 'Residência médica concluída'),
+  ('3b34ba77-43ff-4cc8-87da-df2b6fe9a79d', 'RG'),
+  ('07414a9a-8bf3-41fc-a532-8af06cd214e5', 'RQE')
+ON CONFLICT (id) DO UPDATE
+SET
+  nome = EXCLUDED.nome;
 
 INSERT INTO public.formas_recebimento (id, created_at, forma_recebimento)
 VALUES (
@@ -761,7 +798,7 @@ VALUES (
     '3a3a3a3a-3a3a-43a3-83a3-3a3a3a3a3a3a',
     '3b3b3b3b-3b3b-43b3-83b3-3b3b3b3b3b3b'
   ]::uuid[],
-  ARRAY['55555555-5555-4555-8555-555555555555']::uuid[]
+  ARRAY['1382a750-6424-430c-9672-bbd92d3c9eb8']::uuid[]
 )
 ON CONFLICT (user_id, role) DO UPDATE
 SET
@@ -783,7 +820,7 @@ VALUES (
     '3a3a3a3a-3a3a-43a3-83a3-3a3a3a3a3a3a',
     '3b3b3b3b-3b3b-43b3-83b3-3b3b3b3b3b3b'
   ]::uuid[],
-  ARRAY['55555555-5555-4555-8555-555555555555']::uuid[]
+  ARRAY['1382a750-6424-430c-9672-bbd92d3c9eb8']::uuid[]
 )
 ON CONFLICT (user_id, role) DO UPDATE
 SET
@@ -805,7 +842,7 @@ VALUES (
     '3a3a3a3a-3a3a-43a3-83a3-3a3a3a3a3a3a',
     '3b3b3b3b-3b3b-43b3-83b3-3b3b3b3b3b3b'
   ]::uuid[],
-  ARRAY['55555555-5555-4555-8555-555555555555']::uuid[]
+  ARRAY['1382a750-6424-430c-9672-bbd92d3c9eb8']::uuid[]
 )
 ON CONFLICT (user_id, role) DO UPDATE
 SET
@@ -1079,7 +1116,7 @@ VALUES (
   '22222222-2222-4222-8222-222222222222',
   'Grade Clínica Geral - Semana Demo',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
+  '1382a750-6424-430c-9672-bbd92d3c9eb8',
   '33333333-3333-4333-8333-333333333333',
   '#0EA5E9',
   7,
@@ -1133,7 +1170,7 @@ VALUES (
     "valorPorHora":160,
     "diasPagamento":"30dias",
     "formaRecebimento":"88888888-8888-4888-8888-888888888888",
-    "tipoVaga":"77777777-7777-4777-8777-777777777777",
+    "tipoVaga":"87f2ad06-0fe8-4e8b-9df2-e7314c38228e",
     "observacoesPadrao":"Plantões gerados automaticamente a partir da grade demo."
   ,
     "slots": [
@@ -1226,10 +1263,10 @@ VALUES (
   (CURRENT_DATE + 2),
   '33333333-3333-4333-8333-333333333333',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
-  '66666666-6666-4666-8666-666666666666',
+  'ae1055f0-4527-460e-8ac5-d81a936ec5f1',
+  '7b3b2041-055a-4e14-9ea9-3d4696552165',
   '12121212-1212-4121-8121-121212121212',
-  '77777777-7777-4777-8777-777777777777',
+  '418cf451-ec43-415c-87bc-5685dc290842',
   (CURRENT_DATE + 30),
   '07:00:00',
   '19:00:00',
@@ -1297,10 +1334,10 @@ VALUES (
   (CURRENT_DATE + 3),
   '33333333-3333-4333-8333-333333333333',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
-  '66666666-6666-4666-8666-666666666666',
+  '6beadfb3-861d-46fe-8515-16c0c2708204',
+  'b4615fd3-37e9-486e-8186-9266e3013c03',
   '13131313-1313-4131-8131-131313131313',
-  '77777777-7777-4777-8777-777777777777',
+  '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e',
   (CURRENT_DATE + 33),
   '07:00:00',
   '19:00:00',
@@ -1368,10 +1405,10 @@ VALUES (
   (CURRENT_DATE + 5),
   '33333333-3333-4333-8333-333333333333',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
-  '66666666-6666-4666-8666-666666666666',
+  '45da1a0b-9a69-4acf-80c1-136e33a6eca1',
+  '53d7c9d2-c042-4a37-aee9-dfd13d2882bf',
   '13131313-1313-4131-8131-131313131313',
-  '77777777-7777-4777-8777-777777777777',
+  '87f2ad06-0fe8-4e8b-9df2-e7314c38228e',
   (CURRENT_DATE + 35),
   '07:00:00',
   '19:00:00',
@@ -1431,7 +1468,7 @@ VALUES (
   '22222222-2222-4222-8222-222222222222',
   'Grade Jan/Fev 2026 - Clínica Geral',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
+  '1382a750-6424-430c-9672-bbd92d3c9eb8',
   '33333333-3333-4333-8333-333333333333',
   '#16A34A',
   7,
@@ -1455,7 +1492,7 @@ VALUES (
     "valorPorHora":170,
     "diasPagamento":"30dias",
     "formaRecebimento":"88888888-8888-4888-8888-888888888888",
-    "tipoVaga":"77777777-7777-4777-8777-777777777777",
+    "tipoVaga":"87f2ad06-0fe8-4e8b-9df2-e7314c38228e",
     "observacoesPadrao":"Plantões de janeiro e fevereiro de 2026."
   }'::jsonb,
   1,
@@ -1515,6 +1552,7 @@ WITH jan_fev_datas AS (
 escala AS (
   SELECT
     data_plantao,
+    rn,
     CASE ((rn - 1) % 4)
       WHEN 0 THEN 'f1111111-1111-4111-8111-111111111111'::uuid
       WHEN 1 THEN 'f2222222-2222-4222-8222-222222222222'::uuid
@@ -1526,6 +1564,7 @@ escala AS (
 vagas_base AS (
   SELECT
     data_plantao,
+    rn,
     medico_precadastro_id,
     (
       substr(md5('demo-janfeb-vaga-' || data_plantao::text), 1, 8) || '-' ||
@@ -1568,10 +1607,29 @@ SELECT
   data_plantao,
   '33333333-3333-4333-8333-333333333333',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
-  '66666666-6666-4666-8666-666666666666',
+  CASE (rn % 7)
+    WHEN 1 THEN 'ae1055f0-4527-460e-8ac5-d81a936ec5f1'
+    WHEN 2 THEN 'a0dd42c1-689a-4d19-ab06-6ddc329bf39b'
+    WHEN 3 THEN '6beadfb3-861d-46fe-8515-16c0c2708204'
+    WHEN 4 THEN '93f00415-ab9c-4911-a6cb-197b430d71a1'
+    WHEN 5 THEN 'd773c3a0-5816-4ee2-8e07-48f8c321789c'
+    WHEN 6 THEN '45da1a0b-9a69-4acf-80c1-136e33a6eca1'
+    ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
+  END,
+  CASE (rn % 6)
+    WHEN 1 THEN 'd211f079-a3f9-4cf7-9c47-084b699a26e5'
+    WHEN 2 THEN 'b4615fd3-37e9-486e-8186-9266e3013c03'
+    WHEN 3 THEN '719e1973-f238-4d11-9208-5d7d6de2e919'
+    WHEN 4 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
+    WHEN 5 THEN '91450e1e-2931-4c0d-932d-7c4787dd1512'
+    ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
+  END,
   '13131313-1313-4131-8131-131313131313',
-  '77777777-7777-4777-8777-777777777777',
+  CASE (rn % 3)
+    WHEN 1 THEN '418cf451-ec43-415c-87bc-5685dc290842'
+    WHEN 2 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
+    ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
+  END,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
@@ -1694,7 +1752,7 @@ VALUES (
   '22222222-2222-4222-8222-222222222222',
   'Grade Março 2026 - Clínica Geral',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
+  '1382a750-6424-430c-9672-bbd92d3c9eb8',
   '33333333-3333-4333-8333-333333333333',
   '#F97316',
   7,
@@ -1718,7 +1776,7 @@ VALUES (
     "valorPorHora":175,
     "diasPagamento":"30dias",
     "formaRecebimento":"88888888-8888-4888-8888-888888888888",
-    "tipoVaga":"77777777-7777-4777-8777-777777777777",
+    "tipoVaga":"87f2ad06-0fe8-4e8b-9df2-e7314c38228e",
     "observacoesPadrao":"Plantões de março de 2026 para demonstração."
   }'::jsonb,
   2,
@@ -1820,10 +1878,29 @@ SELECT
   data_plantao,
   '33333333-3333-4333-8333-333333333333',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
-  '66666666-6666-4666-8666-666666666666',
+  CASE (rn % 7)
+    WHEN 1 THEN 'ae1055f0-4527-460e-8ac5-d81a936ec5f1'
+    WHEN 2 THEN 'a0dd42c1-689a-4d19-ab06-6ddc329bf39b'
+    WHEN 3 THEN '6beadfb3-861d-46fe-8515-16c0c2708204'
+    WHEN 4 THEN '93f00415-ab9c-4911-a6cb-197b430d71a1'
+    WHEN 5 THEN 'd773c3a0-5816-4ee2-8e07-48f8c321789c'
+    WHEN 6 THEN '45da1a0b-9a69-4acf-80c1-136e33a6eca1'
+    ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
+  END,
+  CASE (rn % 6)
+    WHEN 1 THEN 'd211f079-a3f9-4cf7-9c47-084b699a26e5'
+    WHEN 2 THEN 'b4615fd3-37e9-486e-8186-9266e3013c03'
+    WHEN 3 THEN '719e1973-f238-4d11-9208-5d7d6de2e919'
+    WHEN 4 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
+    WHEN 5 THEN '91450e1e-2931-4c0d-932d-7c4787dd1512'
+    ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
+  END,
   '13131313-1313-4131-8131-131313131313',
-  '77777777-7777-4777-8777-777777777777',
+  CASE (rn % 3)
+    WHEN 1 THEN '418cf451-ec43-415c-87bc-5685dc290842'
+    WHEN 2 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
+    ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
+  END,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
@@ -1948,7 +2025,7 @@ VALUES (
   '22222222-2222-4222-8222-222222222222',
   'Grade Março 2026 - Hospital Norte',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
+  '1382a750-6424-430c-9672-bbd92d3c9eb8',
   '3a3a3a3a-3a3a-43a3-83a3-3a3a3a3a3a3a',
   '#0284C7',
   7,
@@ -1962,7 +2039,7 @@ VALUES (
     "valorPorHora":185,
     "diasPagamento":"30dias",
     "formaRecebimento":"88888888-8888-4888-8888-888888888888",
-    "tipoVaga":"77777777-7777-4777-8777-777777777777",
+    "tipoVaga":"87f2ad06-0fe8-4e8b-9df2-e7314c38228e",
     "observacoesPadrao":"Plantões de terça no Hospital Norte."
   }'::jsonb,
   3,
@@ -2062,10 +2139,23 @@ SELECT
   data_plantao,
   '3a3a3a3a-3a3a-43a3-83a3-3a3a3a3a3a3a',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
-  '66666666-6666-4666-8666-666666666666',
+  CASE (rn % 4)
+    WHEN 1 THEN 'a0dd42c1-689a-4d19-ab06-6ddc329bf39b'
+    WHEN 2 THEN '6beadfb3-861d-46fe-8515-16c0c2708204'
+    WHEN 3 THEN '93f00415-ab9c-4911-a6cb-197b430d71a1'
+    ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
+  END,
+  CASE (rn % 3)
+    WHEN 1 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
+    WHEN 2 THEN '91450e1e-2931-4c0d-932d-7c4787dd1512'
+    ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
+  END,
   '13131313-1313-4131-8131-131313131313',
-  '77777777-7777-4777-8777-777777777777',
+  CASE (rn % 3)
+    WHEN 1 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
+    WHEN 2 THEN '418cf451-ec43-415c-87bc-5685dc290842'
+    ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
+  END,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
@@ -2179,7 +2269,7 @@ VALUES (
   '22222222-2222-4222-8222-222222222222',
   'Grade Março 2026 - Hospital Sul',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
+  '1382a750-6424-430c-9672-bbd92d3c9eb8',
   '3b3b3b3b-3b3b-43b3-83b3-3b3b3b3b3b3b',
   '#BE123C',
   7,
@@ -2193,7 +2283,7 @@ VALUES (
     "valorPorHora":188,
     "diasPagamento":"30dias",
     "formaRecebimento":"88888888-8888-4888-8888-888888888888",
-    "tipoVaga":"77777777-7777-4777-8777-777777777777",
+    "tipoVaga":"87f2ad06-0fe8-4e8b-9df2-e7314c38228e",
     "observacoesPadrao":"Plantões de quinta no Hospital Sul."
   }'::jsonb,
   4,
@@ -2293,10 +2383,23 @@ SELECT
   data_plantao,
   '3b3b3b3b-3b3b-43b3-83b3-3b3b3b3b3b3b',
   '44444444-4444-4444-8444-444444444444',
-  '55555555-5555-4555-8555-555555555555',
-  '66666666-6666-4666-8666-666666666666',
+  CASE (rn % 4)
+    WHEN 1 THEN 'd773c3a0-5816-4ee2-8e07-48f8c321789c'
+    WHEN 2 THEN '45da1a0b-9a69-4acf-80c1-136e33a6eca1'
+    WHEN 3 THEN '6beadfb3-861d-46fe-8515-16c0c2708204'
+    ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
+  END,
+  CASE (rn % 3)
+    WHEN 1 THEN '719e1973-f238-4d11-9208-5d7d6de2e919'
+    WHEN 2 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
+    ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
+  END,
   '13131313-1313-4131-8131-131313131313',
-  '77777777-7777-4777-8777-777777777777',
+  CASE (rn % 3)
+    WHEN 1 THEN '418cf451-ec43-415c-87bc-5685dc290842'
+    WHEN 2 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
+    ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
+  END,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
@@ -2385,5 +2488,74 @@ SET
   updated_by = EXCLUDED.updated_by,
   vaga_valor = EXCLUDED.vaga_valor,
   medico_precadastro_id = EXCLUDED.medico_precadastro_id;
+
+-- -----------------------------------------------------------------------------
+-- Benefícios e requisitos distribuídos nas vagas demo
+-- -----------------------------------------------------------------------------
+DELETE FROM public.vagas_beneficios vb
+USING public.vagas v
+WHERE vb.vaga_id = v.id
+  AND v.grupo_id = '22222222-2222-4222-8222-222222222222';
+
+DELETE FROM public.vagas_requisitos vr
+USING public.vagas v
+WHERE vr.vaga_id = v.id
+  AND v.grupo_id = '22222222-2222-4222-8222-222222222222';
+
+WITH demo_vagas AS (
+  SELECT
+    id AS vaga_id,
+    ROW_NUMBER() OVER (ORDER BY data, id) AS rn
+  FROM public.vagas
+  WHERE grupo_id = '22222222-2222-4222-8222-222222222222'
+)
+INSERT INTO public.vagas_beneficios (vaga_id, beneficio_id)
+SELECT vaga_id, '2b7c4861-5fdc-4e71-8d19-e6a0941ab9e2'::uuid
+FROM demo_vagas
+UNION ALL
+SELECT
+  vaga_id,
+  CASE (rn % 8)
+    WHEN 1 THEN 'e47d776b-e40f-401f-a161-a87d3eef7674'::uuid
+    WHEN 2 THEN 'eeec6469-36ca-41ef-ba70-0bd33d9573d4'::uuid
+    WHEN 3 THEN '3a226090-183a-4371-a560-c9c620ca2866'::uuid
+    WHEN 4 THEN '66185cc4-56dd-4365-8be9-ff42845e0d0a'::uuid
+    WHEN 5 THEN '4b852596-aa60-44d2-b422-a69032c94f7e'::uuid
+    WHEN 6 THEN '9ee5f725-e286-4cbc-a900-bc0f1320282e'::uuid
+    WHEN 7 THEN '211d599d-5b3e-4123-9242-51f6e957fdff'::uuid
+    ELSE 'b55fca22-78d4-4b30-9cb1-f1b8fdc0a96a'::uuid
+  END
+FROM demo_vagas;
+
+WITH demo_vagas AS (
+  SELECT
+    id AS vaga_id,
+    ROW_NUMBER() OVER (ORDER BY data, id) AS rn
+  FROM public.vagas
+  WHERE grupo_id = '22222222-2222-4222-8222-222222222222'
+)
+INSERT INTO public.vagas_requisitos (vaga_id, requisito_id)
+SELECT vaga_id, '62a37948-7219-400f-bbdc-2fffb5623ced'::uuid
+FROM demo_vagas
+UNION ALL
+SELECT
+  vaga_id,
+  CASE (rn % 14)
+    WHEN 1 THEN '07414a9a-8bf3-41fc-a532-8af06cd214e5'::uuid
+    WHEN 2 THEN 'dbb51dbd-2104-4ed4-9626-aacad80921c4'::uuid
+    WHEN 3 THEN '4552b3ff-5fc1-4b0b-8c5a-c597d44f81ac'::uuid
+    WHEN 4 THEN '06d4fba5-5ae7-44b7-add3-24d372017b95'::uuid
+    WHEN 5 THEN '213314a6-beb5-44ed-990b-8171a08b2b20'::uuid
+    WHEN 6 THEN 'a8440cc5-2074-4a68-98e3-55afc7d68eee'::uuid
+    WHEN 7 THEN '9801f87b-8407-4bed-a4d8-4308273c6a58'::uuid
+    WHEN 8 THEN '3b34ba77-43ff-4cc8-87da-df2b6fe9a79d'::uuid
+    WHEN 9 THEN '46267ac0-7e61-4b2b-9cd4-fe830fa20463'::uuid
+    WHEN 10 THEN '39518d7f-b219-4b3d-855e-500aef497c56'::uuid
+    WHEN 11 THEN '84146d8d-4283-4e9d-bbda-3451ec5e4ec7'::uuid
+    WHEN 12 THEN '091a379f-6da7-4b7d-b942-28172cb657a0'::uuid
+    WHEN 13 THEN '1266a931-1ede-4097-ba6b-8003cf9e8fd6'::uuid
+    ELSE '5f9e5c3f-4554-496d-b6c0-ab335ea076af'::uuid
+  END
+FROM demo_vagas;
 
 COMMIT;
