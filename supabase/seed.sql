@@ -1615,7 +1615,7 @@ SELECT
     WHEN 5 THEN 'd773c3a0-5816-4ee2-8e07-48f8c321789c'
     WHEN 6 THEN '45da1a0b-9a69-4acf-80c1-136e33a6eca1'
     ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
-  END,
+  END::uuid,
   CASE (rn % 6)
     WHEN 1 THEN 'd211f079-a3f9-4cf7-9c47-084b699a26e5'
     WHEN 2 THEN 'b4615fd3-37e9-486e-8186-9266e3013c03'
@@ -1623,13 +1623,13 @@ SELECT
     WHEN 4 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
     WHEN 5 THEN '91450e1e-2931-4c0d-932d-7c4787dd1512'
     ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
-  END,
+  END::uuid,
   '13131313-1313-4131-8131-131313131313',
   CASE (rn % 3)
     WHEN 1 THEN '418cf451-ec43-415c-87bc-5685dc290842'
     WHEN 2 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
     ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
-  END,
+  END::uuid,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
@@ -1886,7 +1886,7 @@ SELECT
     WHEN 5 THEN 'd773c3a0-5816-4ee2-8e07-48f8c321789c'
     WHEN 6 THEN '45da1a0b-9a69-4acf-80c1-136e33a6eca1'
     ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
-  END,
+  END::uuid,
   CASE (rn % 6)
     WHEN 1 THEN 'd211f079-a3f9-4cf7-9c47-084b699a26e5'
     WHEN 2 THEN 'b4615fd3-37e9-486e-8186-9266e3013c03'
@@ -1894,13 +1894,13 @@ SELECT
     WHEN 4 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
     WHEN 5 THEN '91450e1e-2931-4c0d-932d-7c4787dd1512'
     ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
-  END,
+  END::uuid,
   '13131313-1313-4131-8131-131313131313',
   CASE (rn % 3)
     WHEN 1 THEN '418cf451-ec43-415c-87bc-5685dc290842'
     WHEN 2 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
     ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
-  END,
+  END::uuid,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
@@ -2144,18 +2144,18 @@ SELECT
     WHEN 2 THEN '6beadfb3-861d-46fe-8515-16c0c2708204'
     WHEN 3 THEN '93f00415-ab9c-4911-a6cb-197b430d71a1'
     ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
-  END,
+  END::uuid,
   CASE (rn % 3)
     WHEN 1 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
     WHEN 2 THEN '91450e1e-2931-4c0d-932d-7c4787dd1512'
     ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
-  END,
+  END::uuid,
   '13131313-1313-4131-8131-131313131313',
   CASE (rn % 3)
     WHEN 1 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
     WHEN 2 THEN '418cf451-ec43-415c-87bc-5685dc290842'
     ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
-  END,
+  END::uuid,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
@@ -2388,18 +2388,18 @@ SELECT
     WHEN 2 THEN '45da1a0b-9a69-4acf-80c1-136e33a6eca1'
     WHEN 3 THEN '6beadfb3-861d-46fe-8515-16c0c2708204'
     ELSE '1382a750-6424-430c-9672-bbd92d3c9eb8'
-  END,
+  END::uuid,
   CASE (rn % 3)
     WHEN 1 THEN '719e1973-f238-4d11-9208-5d7d6de2e919'
     WHEN 2 THEN '7b3b2041-055a-4e14-9ea9-3d4696552165'
     ELSE '53d7c9d2-c042-4a37-aee9-dfd13d2882bf'
-  END,
+  END::uuid,
   '13131313-1313-4131-8131-131313131313',
   CASE (rn % 3)
     WHEN 1 THEN '418cf451-ec43-415c-87bc-5685dc290842'
     WHEN 2 THEN '9ccb08ca-fbe0-46ac-94f4-5067a2e5ff1e'
     ELSE '87f2ad06-0fe8-4e8b-9df2-e7314c38228e'
-  END,
+  END::uuid,
   (data_plantao + 30),
   '07:00:00',
   '19:00:00',
