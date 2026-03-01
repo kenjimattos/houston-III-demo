@@ -33,6 +33,8 @@ BEGIN;
 -- demo_medico_pre_4   = f4444444-4444-4444-8444-444444444444
 -- demo_grade_janfeb   = abababab-abab-4aba-8aba-abababababab
 -- demo_recor_janfeb   = acacacac-acac-4aca-8aca-acacacacacac
+-- demo_grade_marco    = adadadad-adad-4ada-8ada-adadadadadad
+-- demo_recor_marco    = aeaeaeae-aeae-4aea-8aea-aeaeaeaeaeae
 -- demo_medico_shadow  = 9cd29712-91b5-492f-86ff-41e38c7b03d5
 
 -- -----------------------------------------------------------------------------
@@ -922,9 +924,7 @@ VALUES (
             "vagasCount":1,
             "lineIndex":0,
             "rowIndex":0,
-            "assignedVagas":[
-              {"medicoId":"f1111111-1111-4111-8111-111111111111","medicoNome":"Ana Carvalho"}
-            ]
+            "assignedVagas":[]
           }
         ],
         "1": [],
@@ -936,9 +936,7 @@ VALUES (
             "vagasCount":1,
             "lineIndex":0,
             "rowIndex":0,
-            "assignedVagas":[
-              {"medicoId":"f2222222-2222-4222-8222-222222222222","medicoNome":"Bruno Mendes"}
-            ]
+            "assignedVagas":[]
           }
         ],
         "3": [],
@@ -950,9 +948,7 @@ VALUES (
             "vagasCount":1,
             "lineIndex":0,
             "rowIndex":0,
-            "assignedVagas":[
-              {"medicoId":"f3333333-3333-4333-8333-333333333333","medicoNome":"Camila Rocha"}
-            ]
+            "assignedVagas":[]
           }
         ],
         "5": [],
@@ -1493,6 +1489,260 @@ SELECT
   1700,
   medico_precadastro_id
 FROM candidaturas_base
+ON CONFLICT (id) DO UPDATE
+SET
+  data_confirmacao = EXCLUDED.data_confirmacao,
+  status = EXCLUDED.status,
+  updated_at = NOW(),
+  updated_by = EXCLUDED.updated_by,
+  vaga_valor = EXCLUDED.vaga_valor,
+  medico_precadastro_id = EXCLUDED.medico_precadastro_id;
+
+-- -----------------------------------------------------------------------------
+-- Grade Março 2026 + vagas (parte preenchida com médicos, sem conflito)
+-- -----------------------------------------------------------------------------
+INSERT INTO public.grades (
+  id,
+  grupo_id,
+  nome,
+  especialidade_id,
+  setor_id,
+  hospital_id,
+  cor,
+  horario_inicial,
+  configuracao,
+  ordem,
+  created_at,
+  updated_at,
+  created_by,
+  updated_by
+)
+VALUES (
+  'adadadad-adad-4ada-8ada-adadadadadad',
+  '22222222-2222-4222-8222-222222222222',
+  'Grade Março 2026 - Clínica Geral',
+  '44444444-4444-4444-8444-444444444444',
+  '55555555-5555-4555-8555-555555555555',
+  '33333333-3333-4333-8333-333333333333',
+  '#F97316',
+  7,
+  '{
+    "lineNames":{"0":"Março 2026"},
+    "selectedDays":{"0":[true,false,true,false,true,false,false]},
+    "slotsByDay":{
+      "0":{
+        "0":[{"id":"marco-seg","startHour":7,"endHour":19,"vagasCount":1,"lineIndex":0,"rowIndex":0,"assignedVagas":[]}],
+        "1":[],
+        "2":[{"id":"marco-qua","startHour":7,"endHour":19,"vagasCount":1,"lineIndex":0,"rowIndex":0,"assignedVagas":[]}],
+        "3":[],
+        "4":[{"id":"marco-sex","startHour":7,"endHour":19,"vagasCount":1,"lineIndex":0,"rowIndex":0,"assignedVagas":[]}],
+        "5":[],
+        "6":[]
+      }
+    },
+    "weekStartHours":{"0":7},
+    "dayRowCounts":{"0":{"0":1,"2":1,"4":1}},
+    "tipoCalculo":"valor_hora",
+    "valorPorHora":175,
+    "diasPagamento":"30dias",
+    "formaRecebimento":"88888888-8888-4888-8888-888888888888",
+    "tipoVaga":"77777777-7777-4777-8777-777777777777",
+    "observacoesPadrao":"Plantões de março de 2026 para demonstração."
+  }'::jsonb,
+  2,
+  NOW(),
+  NOW(),
+  '12121212-1212-4121-8121-121212121212',
+  '12121212-1212-4121-8121-121212121212'
+)
+ON CONFLICT (id) DO UPDATE
+SET
+  nome = EXCLUDED.nome,
+  especialidade_id = EXCLUDED.especialidade_id,
+  setor_id = EXCLUDED.setor_id,
+  hospital_id = EXCLUDED.hospital_id,
+  cor = EXCLUDED.cor,
+  horario_inicial = EXCLUDED.horario_inicial,
+  configuracao = EXCLUDED.configuracao,
+  ordem = EXCLUDED.ordem,
+  updated_at = NOW(),
+  updated_by = EXCLUDED.updated_by;
+
+INSERT INTO public.vagas_recorrencias (
+  id,
+  created_at,
+  updated_at,
+  created_by,
+  data_inicio,
+  data_fim,
+  dias_semana,
+  observacoes
+)
+VALUES (
+  'aeaeaeae-aeae-4aea-8aea-aeaeaeaeaeae',
+  NOW(),
+  NOW(),
+  '12121212-1212-4121-8121-121212121212',
+  DATE '2026-03-01',
+  DATE '2026-03-31',
+  ARRAY[1,3,5],
+  'Recorrência da grade Março 2026.'
+)
+ON CONFLICT (id) DO UPDATE
+SET
+  updated_at = NOW(),
+  data_inicio = EXCLUDED.data_inicio,
+  data_fim = EXCLUDED.data_fim,
+  dias_semana = EXCLUDED.dias_semana,
+  observacoes = EXCLUDED.observacoes;
+
+WITH marco_datas AS (
+  SELECT
+    d::date AS data_plantao,
+    ROW_NUMBER() OVER (ORDER BY d::date) AS rn
+  FROM generate_series(DATE '2026-03-01', DATE '2026-03-31', INTERVAL '1 day') AS d
+  WHERE EXTRACT(ISODOW FROM d) IN (1, 3, 5)
+),
+vagas_marco AS (
+  SELECT
+    data_plantao,
+    rn,
+    (
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 1, 8) || '-' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 9, 4) || '-4' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 14, 3) || '-a' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 18, 3) || '-' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 21, 12)
+    )::uuid AS vaga_id
+  FROM marco_datas
+)
+INSERT INTO public.vagas (
+  id,
+  created_at,
+  updated_at,
+  updated_by,
+  data,
+  hospital_id,
+  especialidade_id,
+  setor_id,
+  periodo_id,
+  escalista_id,
+  tipos_vaga_id,
+  data_pagamento,
+  hora_inicio,
+  hora_fim,
+  valor,
+  observacoes,
+  status,
+  total_candidaturas,
+  grupo_id,
+  forma_recebimento_id,
+  recorrencia_id,
+  grade_id
+)
+SELECT
+  vaga_id,
+  NOW(),
+  NOW(),
+  '13131313-1313-4131-8131-131313131313',
+  data_plantao,
+  '33333333-3333-4333-8333-333333333333',
+  '44444444-4444-4444-8444-444444444444',
+  '55555555-5555-4555-8555-555555555555',
+  '66666666-6666-4666-8666-666666666666',
+  '13131313-1313-4131-8131-131313131313',
+  '77777777-7777-4777-8777-777777777777',
+  (data_plantao + 30),
+  '07:00:00',
+  '19:00:00',
+  1750,
+  'Plantão de março de 2026.',
+  CASE WHEN (rn % 2) = 1 THEN 'fechada' ELSE 'aberta' END,
+  CASE WHEN (rn % 2) = 1 THEN 1 ELSE 0 END,
+  '22222222-2222-4222-8222-222222222222',
+  '88888888-8888-4888-8888-888888888888',
+  'aeaeaeae-aeae-4aea-8aea-aeaeaeaeaeae',
+  'adadadad-adad-4ada-8ada-adadadadadad'
+FROM vagas_marco
+ON CONFLICT (id) DO UPDATE
+SET
+  updated_at = NOW(),
+  updated_by = EXCLUDED.updated_by,
+  data = EXCLUDED.data,
+  data_pagamento = EXCLUDED.data_pagamento,
+  hora_inicio = EXCLUDED.hora_inicio,
+  hora_fim = EXCLUDED.hora_fim,
+  valor = EXCLUDED.valor,
+  observacoes = EXCLUDED.observacoes,
+  status = EXCLUDED.status,
+  total_candidaturas = EXCLUDED.total_candidaturas,
+  recorrencia_id = EXCLUDED.recorrencia_id,
+  grade_id = EXCLUDED.grade_id;
+
+WITH marco_datas AS (
+  SELECT
+    d::date AS data_plantao,
+    ROW_NUMBER() OVER (ORDER BY d::date) AS rn
+  FROM generate_series(DATE '2026-03-01', DATE '2026-03-31', INTERVAL '1 day') AS d
+  WHERE EXTRACT(ISODOW FROM d) IN (1, 3, 5)
+),
+escala AS (
+  SELECT
+    data_plantao,
+    rn,
+    CASE (((rn - 1) % 4))
+      WHEN 0 THEN 'f1111111-1111-4111-8111-111111111111'::uuid
+      WHEN 1 THEN 'f2222222-2222-4222-8222-222222222222'::uuid
+      WHEN 2 THEN 'f3333333-3333-4333-8333-333333333333'::uuid
+      ELSE 'f4444444-4444-4444-8444-444444444444'::uuid
+    END AS medico_precadastro_id
+  FROM marco_datas
+  WHERE (rn % 2) = 1
+),
+candidaturas_marco AS (
+  SELECT
+    data_plantao,
+    medico_precadastro_id,
+    (
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 1, 8) || '-' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 9, 4) || '-4' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 14, 3) || '-a' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 18, 3) || '-' ||
+      substr(md5('demo-marco-vaga-' || data_plantao::text), 21, 12)
+    )::uuid AS vaga_id,
+    (
+      substr(md5('demo-marco-candidatura-' || data_plantao::text), 1, 8) || '-' ||
+      substr(md5('demo-marco-candidatura-' || data_plantao::text), 9, 4) || '-4' ||
+      substr(md5('demo-marco-candidatura-' || data_plantao::text), 14, 3) || '-a' ||
+      substr(md5('demo-marco-candidatura-' || data_plantao::text), 18, 3) || '-' ||
+      substr(md5('demo-marco-candidatura-' || data_plantao::text), 21, 12)
+    )::uuid AS candidatura_id
+  FROM escala
+)
+INSERT INTO public.candidaturas (
+  id,
+  created_at,
+  data_confirmacao,
+  medico_id,
+  vaga_id,
+  status,
+  updated_at,
+  updated_by,
+  vaga_valor,
+  medico_precadastro_id
+)
+SELECT
+  candidatura_id,
+  NOW(),
+  data_plantao,
+  '9cd29712-91b5-492f-86ff-41e38c7b03d5',
+  vaga_id,
+  'APROVADO',
+  NOW(),
+  '12121212-1212-4121-8121-121212121212',
+  1750,
+  medico_precadastro_id
+FROM candidaturas_marco
 ON CONFLICT (id) DO UPDATE
 SET
   data_confirmacao = EXCLUDED.data_confirmacao,
