@@ -21,6 +21,11 @@ Todos os dados do demo são fictícios e sanitizados.
 - Supabase (Postgres/Auth/Storage via Supabase CLI)
 - Docker
 
+## Demo online
+
+- URL: https://houston-demo.vercel.app/
+- Login demo: `demo@houston.local` / `demo123456`
+
 ## Pré-requisitos
 
 - Node.js **22+**
