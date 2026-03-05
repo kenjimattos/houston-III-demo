@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import usePermissions from "@/hooks/usePermissions";
 import { cn } from "@/lib/utils";
 import { logout } from "@/services/authService";

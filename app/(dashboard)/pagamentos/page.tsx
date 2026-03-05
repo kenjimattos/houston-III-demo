@@ -19,7 +19,7 @@ import {
 import { usePagamentosSelection } from "@/hooks/pagamentos/usePagamentosSelection";
 import { usePagamentosBulkOperations } from "@/hooks/pagamentos/usePagamentosBulkOperations";
 import { usePermissions } from "@/hooks/usePermissions";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import {
   fetchEspecialidadesDasVagas,
   fetchSetoresDasVagas,
