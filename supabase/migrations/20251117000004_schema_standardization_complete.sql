@@ -594,7 +594,7 @@ ALTER TABLE public.vagas ADD CONSTRAINT vagas_formarecebimento_fkey
 ALTER TABLE public.vagas ADD CONSTRAINT vagas_vagas_tipo_fkey
     FOREIGN KEY (tipos_vaga_id) REFERENCES tipos_vaga (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE public.vagas ADD CONSTRAINT fk_vagas_grade
-    FOREIGN KEY (grade_id) REFERENCES grades (id) ON DELETE CASCADE ON UPDATE CASCADE;
+    FOREIGN KEY (grade_id) REFERENCES grades (id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- candidaturas
 ALTER TABLE public.candidaturas ADD CONSTRAINT candidaturas_vaga_id_fkey
