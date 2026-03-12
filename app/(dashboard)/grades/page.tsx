@@ -1,5 +1,6 @@
 "use client";
 
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -92,6 +93,7 @@ const GradeCardEditingMode = lazy(() =>
 // Interface Hospital importada de hospitaisService
 
 export default function GradesPage() {
+  const { user: currentUser, grupoId: currentGrupoId } = useCurrentUser();
   const [unsavedChangesModalOpen, setUnsavedChangesModalOpen] = useState(false);
   const [pendingGradeExit, setPendingGradeExit] = useState<string | null>(null);
 
@@ -2827,23 +2829,13 @@ export default function GradesPage() {
       );
     }
 
-    // Obter dados do usuário atual
+    // Obter dados do usuário atual via contexto
     const supabase = getSupabaseClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) throw new Error("Usuário não autenticado");
-
-    // Buscar grupo e escalista_id do usuário
-    const { data: escalista, error: escalistaError } = await supabase
-      .from("escalistas")
-      .select("grupo_id, id")
-      .eq("id", user.id)
-      .single();
-
-    if (escalistaError || !escalista?.grupo_id || !escalista?.id) {
-      throw new Error("Dados do escalista não encontrados");
+    if (!currentUser?.id || !currentGrupoId) {
+      throw new Error("Dados do usuário não encontrados");
     }
+
+    const escalista = { id: currentUser.id, grupo_id: currentGrupoId };
 
     // Verificar e remover vagas antigas da mesma grade no período
 
@@ -3094,7 +3086,7 @@ export default function GradesPage() {
           data_inicio: dataInicioDate.toISOString().slice(0, 10),
           data_fim: dataFimDate.toISOString().slice(0, 10),
           dias_semana: [], // Array vazio - vamos criar vagas individuais
-          created_by: user.id,
+          created_by: currentUser?.id,
           created_at: new Date().toISOString(),
           observacoes: `Grade ${grade.nome} - ${vagasParaCriar.length} vagas individuais`,
         },
@@ -3199,7 +3191,7 @@ export default function GradesPage() {
         forma_recebimento_id: grade.configuracao!.formaRecebimento || "",
         grupo_id: escalista.grupo_id,
         escalista_id: escalista.id,
-        updated_by: user.id,
+        updated_by: currentUser?.id,
         updated_at: new Date().toISOString(),
         recorrencia_id: recorrenciaId, // MESMO ID para todas as vagas
       };

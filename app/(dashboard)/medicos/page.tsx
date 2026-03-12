@@ -72,7 +72,7 @@ import { useEffect, useState, useCallback } from "react";
 
 export default function MedicosPage() {
   // Obter dados do usuário atual do Context
-  const { isAdmin, loading: authLoading } = useCurrentUser();
+  const { user: currentUser, isAdmin, loading: authLoading } = useCurrentUser();
 
   // Função debounce customizada
   const debounce = useCallback((func: Function, delay: number) => {
@@ -464,7 +464,7 @@ export default function MedicosPage() {
       await updateEquipe(editingEquipe.id, {
         nome,
         cor,
-        updated_by: (await supabase.auth.getUser()).data.user?.id || "",
+        updated_by: currentUser?.id || "",
         updated_at: new Date(),
       });
       console.log("Aquele erro criando uma nova Equipe");
