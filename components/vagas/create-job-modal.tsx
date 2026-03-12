@@ -34,7 +34,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { useGrades } from "@/hooks/grades/useGrades";
 import { cn } from "@/lib/utils";
-import { getCurrentUser } from "@/services/authService";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import {
   aprovarCandidatura,
   createCandidatura,
@@ -222,6 +222,7 @@ export function CreateJobModal({
   const [value, setValue] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [jobType, setJobType] = useState<string>("");
+  const { user: currentUser } = useCurrentUser();
   const [observations, setObservations] = useState<string>("");
 
   // Estados para médico
@@ -909,7 +910,6 @@ export function CreateJobModal({
 
     try {
       setLoading(true);
-      const user = await getCurrentUser();
       const now = getBrazilNowISO();
 
       // Lógica para edição em lote
@@ -1035,7 +1035,7 @@ export function CreateJobModal({
             vaga_status: novoStatus,
             vaga_especialidade:
               selectedSpecialty || editData?.especialidade_id || "",
-            updated_by: user.id,
+            updated_by: currentUser?.id,
             grupo_id: selectedGrupo || (editData as any)?.grupo_id || "",
             vaga_observacoes: observations,
             medico_designado: selectedDoctor || null, // Campo especial para indicar médico designado na edição em massa
@@ -1055,7 +1055,7 @@ export function CreateJobModal({
           setPendingUpdate({
             recorrencia_id: (editData as any).recorrencia_id,
             update: vagaUpdateRecorrencia,
-            updateby: user.id,
+            updateby: currentUser?.id,
             selectedBeneficios,
             selectedRequisitos,
             diasPagamento,
@@ -1136,7 +1136,7 @@ export function CreateJobModal({
             status: novoStatus,
             especialidade_id:
               selectedSpecialty || editData?.especialidade_id || "",
-            updated_by: user.id,
+            updated_by: currentUser?.id,
             grupo_id: selectedGrupo || (editData as any)?.grupo_id || "",
             observacoes: observations,
             grade_id:
@@ -1439,7 +1439,7 @@ export function CreateJobModal({
               tipos_vaga_id: jobType,
               vagas_setor: selectedSector,
               vaga_escalista: selectedEscalista,
-              updated_by: user.id,
+              updated_by: currentUser?.id,
               vaga_especialidade: selectedSpecialty,
               grupo_id: selectedGrupo,
               vaga_observacoes: observations,
@@ -1461,7 +1461,7 @@ export function CreateJobModal({
               data_fim: dataFim.toISOString().slice(0, 10),
               dias_semana: diasSemana,
               vaga_base: vagaBase,
-              created_by: user.id,
+              created_by: currentUser?.id,
               medico_id: selectedDoctor || null,
               observacoes: `Recorrência criada automaticamente - ${diasSemana
                 .map(
@@ -1543,7 +1543,7 @@ export function CreateJobModal({
                 tipos_vaga_id: jobType,
                 vagas_setor: selectedSector,
                 vaga_escalista: selectedEscalista,
-                updated_by: user.id,
+                updated_by: currentUser?.id,
                 vaga_especialidade: selectedSpecialty,
                 grupo_id: selectedGrupo,
                 vaga_observacoes: observations,
@@ -1658,7 +1658,7 @@ export function CreateJobModal({
             tipos_vaga_id: jobType,
             vagas_setor: selectedSector,
             vaga_escalista: selectedEscalista,
-            updated_by: user.id,
+            updated_by: currentUser?.id,
             vaga_especialidade: selectedSpecialty,
             grupo_id: selectedGrupo,
             vaga_observacoes: observations,
@@ -1939,10 +1939,9 @@ export function CreateJobModal({
     if (!editData || !(editData as any).recorrencia_id) return;
     setLoading(true);
     try {
-      const user = await getCurrentUser();
       await deletarVagasRecorrencia({
         recorrencia_id: (editData as any).recorrencia_id,
-        updateby: user.id,
+        updateby: currentUser?.id,
       });
       toast({
         title: "Vagas recorrentes excluídas",

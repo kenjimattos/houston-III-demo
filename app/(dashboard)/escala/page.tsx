@@ -29,7 +29,7 @@ import {
 import { gradesService, type Grade } from "@/services/gradesService";
 import { Card, CardContent } from "@/components/ui/card";
 import { updateVaga } from "@/services/vagasService";
-import { getCurrentUser } from "@/services/authService";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 
 import {
   cancelarCandidaturasDaVaga,
@@ -70,6 +70,7 @@ function getBrazilNowISO() {
 
 function EscalaPageContent() {
   const searchParams = useSearchParams();
+  const { user: currentUser } = useCurrentUser();
 
   // Hooks unificados para operações de seleção e bulk actions
   const {
@@ -754,7 +755,6 @@ function EscalaPageContent() {
 
     setEditLoading(true);
     try {
-      const user = await getCurrentUser();
       const now = getBrazilNowISO();
 
       // Processar vagas em paralelo
@@ -767,7 +767,7 @@ function EscalaPageContent() {
               vagaUpdate: {
                 status: "anunciada",
                 updated_at: now,
-                updated_by: user.id,
+                updated_by: currentUser?.id,
               },
               selectedBeneficios: vaga.beneficios || [],
             });
@@ -1008,7 +1008,6 @@ function EscalaPageContent() {
     dataFechamento,
   }: any) => {
     try {
-      const user = await getCurrentUser();
       const now = getBrazilNowISO();
 
       // Aplicar atualizações para todas as vagas selecionadas
@@ -1021,7 +1020,7 @@ function EscalaPageContent() {
         let finalVagaUpdate = {
           ...vagaUpdate,
           updated_at: now,
-          updated_by: user.id,
+          updated_by: currentUser?.id,
         };
 
         // Calcular data de pagamento individual para cada vaga se especificado
@@ -1086,7 +1085,7 @@ function EscalaPageContent() {
             vagaUpdate: {
               status: "fechada",
               updated_at: now,
-              updated_by: user.id,
+              updated_by: currentUser?.id,
             },
             selectedBeneficios: [],
           });
@@ -1131,7 +1130,7 @@ function EscalaPageContent() {
                 vagaUpdate: {
                   status: "aberta",
                   updated_at: now,
-                  updated_by: user.id,
+                  updated_by: currentUser?.id,
                 },
                 selectedBeneficios: [],
               });

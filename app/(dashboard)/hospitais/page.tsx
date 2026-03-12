@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getCurrentUserWithPermissions } from "@/services/authService";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import {
   deleteHospital,
   fetchHospitais,
@@ -42,23 +42,18 @@ export default function HospitaisPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingHospital, setEditingHospital] = useState<Hospital | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
+  const { userRole, loading: userLoading } = useCurrentUser();
 
   useEffect(() => {
+    if (userLoading) return;
+
     async function loadData() {
       setLoading(true);
       setError(null);
-      setIsCheckingAccess(true);
 
       try {
-        // Primeiro, verificar role do usuário
-        const { roles } = await getCurrentUserWithPermissions();
-        const role = roles[0] || "escalista";
-        setUserRole(role);
-        setIsCheckingAccess(false);
         // Carregar hospitais apenas para usuários com permissão
-        const hospitaisData =  Permission.HOSPITAIS_REMOVE ? await fetchHospitais() : [];
+        const hospitaisData = Permission.HOSPITAIS_REMOVE ? await fetchHospitais() : [];
 
         // Carregar URLs dos avatares dinamicamente
         const hospitaisWithAvatars = hospitaisData.map((hospital) => {
@@ -76,13 +71,12 @@ export default function HospitaisPage() {
         setHospitais(hospitaisWithAvatars);
       } catch (err: any) {
         setError("Erro ao carregar dados");
-        setIsCheckingAccess(false);
       } finally {
         setLoading(false);
       }
     }
     loadData();
-  }, []);
+  }, [userLoading]);
 
   async function reloadHospitais() {
     setLoading(true);
@@ -126,8 +120,7 @@ export default function HospitaisPage() {
     setIsEditModalOpen(true);
   }
 
-  // Mostrar carregamento enquanto verifica acesso
-  if (isCheckingAccess) {
+  if (userLoading) {
     return (
       <div className="space-y-6">
         <Card>

@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Sidebar } from "@/components/sidebar";
-import { getCurrentUser, getUserProfile } from "@/services/authService";
-import { useRouter } from "next/navigation";
-import { getSupabaseClient } from "@/services/supabaseClient";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function DashboardClient({
@@ -13,32 +11,7 @@ export default function DashboardClient({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [profile, setProfile] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        const user = await getCurrentUser();
-        const userProfile = await getUserProfile(user.id);
-
-        setProfile({
-          name: userProfile.nome || user.email,
-          email: userProfile.email || user.email,
-        });
-      } catch (error) {
-        console.error("Erro ao carregar perfil:", error);
-        // Não usar fallback - se não é escalista, redirecionar para login
-        router.push("/auth/login");
-        return;
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadProfile();
-  }, [router]);
+  const { loading } = useCurrentUser();
 
   if (loading) {
     return (
@@ -49,10 +22,6 @@ export default function DashboardClient({
         </div>
       </div>
     );
-  }
-
-  if (!profile) {
-    return null;
   }
 
   return (

@@ -23,7 +23,7 @@ import { ESTADOS_BRASILEIROS } from "@/constants/estados";
 import { formatCPF } from "@/lib/formatters/cpfFormatter";
 import { formatCRM } from "@/lib/formatters/crmFormatter";
 import { formatTelefone } from "@/lib/formatters/telefoneFormatter";
-import { getCurrentUser } from "@/services/authService";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import { searchMedicosByCpfOrCrm } from "@/services/medicosService";
 import { getSupabaseClient } from "@/services/supabaseClient";
 import { isValidCPF } from "@/validators/cpfValidator";
@@ -95,6 +95,7 @@ export function PreCadastroMedicoModal({
   onMedicoPreCadastrado,
   searchTerm = "",
 }: PreCadastroMedicoModalProps) {
+  const { user: currentUser } = useCurrentUser();
   const [primeiroNome, setPrimeiroNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [crm, setCrm] = useState("");
@@ -329,7 +330,6 @@ export function PreCadastroMedicoModal({
 
     try {
       const supabase = getSupabaseClient();
-      const user = await getCurrentUser();
 
       // Verificar se CRM já existe
 
@@ -367,7 +367,7 @@ export function PreCadastroMedicoModal({
             email: email.trim() || null,
             telefone: telefone.replace(/\D/g, "") || null,
             especialidade_id: especialidadeId || null,
-            created_by: user.id,
+            created_by: currentUser?.id,
           },
         ])
         .select()
