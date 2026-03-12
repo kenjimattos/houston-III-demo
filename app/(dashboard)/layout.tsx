@@ -1,7 +1,6 @@
 import DashboardClient from "./DashboardClient";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import { CurrentUserProvider } from "@/contexts/CurrentUserContext";
-// Ensure ProtectedRoute always returns ReactNode or null, never void
+import { CurrentUserProviderContainer } from "@/contexts/CurrentUserProviderContainer";
 
 export default function DashboardLayout({
   children,
@@ -10,9 +9,9 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <CurrentUserProvider>
+      <CurrentUserProviderContainer>
         <DashboardClient>{children}</DashboardClient>
-      </CurrentUserProvider>
+      </CurrentUserProviderContainer>
     </ProtectedRoute>
   );
 }

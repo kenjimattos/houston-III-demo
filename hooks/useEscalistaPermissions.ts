@@ -1,7 +1,6 @@
-import { useMemo, useEffect, useState } from "react";
+import { useMemo } from "react";
 import { usePermissions } from "./usePermissions";
-import { useCurrentUser } from "./useCurrentUser";
-import { getCurrentUser } from "@/services/authService";
+import { useCurrentUser } from "@/contexts/CurrentUserContext";
 
 /**
  * Hook para gerenciar permissões específicas de escalistas
@@ -9,27 +8,7 @@ import { getCurrentUser } from "@/services/authService";
  */
 export function useEscalistaPermissions() {
   const { permissions, initialized } = usePermissions();
-  const { userName, loading: userLoading } = useCurrentUser();
-  const [user, setUser] = useState<any>(null);
-  const [userDataLoading, setUserDataLoading] = useState(true);
-
-  // Buscar dados completos do usuário
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const userData = await getCurrentUser();
-        setUser(userData);
-      } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
-      } finally {
-        setUserDataLoading(false);
-      }
-    }
-
-    if (userName && !userLoading) {
-      fetchUser();
-    }
-  }, [userName, userLoading]);
+  const { user, userRole, loading: userLoading } = useCurrentUser();
 
   const escalistaPermissions = useMemo(() => {
     if (!permissions || !user) {
@@ -62,7 +41,7 @@ export function useEscalistaPermissions() {
 
     // Admins podem ver todos os escalistas, outros usuários só do seu grupo
     const canViewAll =
-      permissions.includes("admin.full") || user.user_role === "admin";
+      permissions.includes("admin.full") || userRole === "administrador";
 
     return {
       canView,
@@ -72,9 +51,9 @@ export function useEscalistaPermissions() {
       canManageRoles,
       canViewAll,
     };
-  }, [permissions, user]);
+  }, [permissions, user, userRole]);
 
-  const isLoading = !initialized || userLoading || userDataLoading;
+  const isLoading = !initialized || userLoading;
 
   /**
    * Verifica se o usuário pode realizar uma ação específica em um escalista
@@ -121,6 +100,6 @@ export function useEscalistaPermissions() {
     canPerformAction,
     getPermissionMessage,
     isLoading,
-    userRole: user?.user_role,
+    userRole,
   };
 }
