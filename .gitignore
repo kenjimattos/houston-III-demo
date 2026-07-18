@@ -44,3 +44,7 @@ CLAUDE.md
 
 # Vitest
 coverage/
+
+# credenciais do supabase hosted (nao commitar)
+.env.hosted.local
+
